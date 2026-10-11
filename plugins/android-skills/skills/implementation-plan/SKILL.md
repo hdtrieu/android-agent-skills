@@ -11,15 +11,18 @@ what is on the critical path, and what still needs deciding.
 
 ## Inputs
 
-1. **Ticket** - problem, goal, scope, acceptance criteria, links (`jira-ticket`).
+1. **Ticket** - problem, goal, scope, acceptance criteria, links, test cases:
+   `integrations.py jira issue KEY --comments 50` (see `project-integrations`).
 2. **Team discussions** (Slack/Teams threads, meeting notes) - decisions and how
    settled they are, rejected alternatives, owners. Use a connected tool or ask the
    user to paste them. This is the only reliable source of decision status.
-3. **PRD** (Confluence or document) - requirements, variants, data rules, edge cases
-   (`project-integrations`).
+3. **PRD** (Confluence or document) - requirements, variants, data rules, edge cases:
+   `integrations.py confluence page <id-or-url>`, `confluence children <id>`,
+   `confluence search --title "..."`.
 4. **Related docs** - adjacent designs, conventions, past estimates.
 5. **Repos** - the nearest existing analogue feature, extension points, endpoints
-   and models, read locally or through GitLab.
+   and models. Read local clones; otherwise `integrations.py gitlab file get <path> --ref <ref>
+   --project <group/project>`.
 
 The PRD says *what* the feature must do; the repos say *what already exists*; the
 gap between them is the scope; the discussions say *which decisions are settled*.

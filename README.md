@@ -27,12 +27,13 @@ them automatically when a task matches their description.
 | `android-conventions` | Kotlin, Compose, Hilt, Coroutines and layer rules for writing or reviewing code |
 | `implement-mvi-feature` | Plan/implement a screen with Action/UiState/Result, pure Reducer, ViewModel |
 | `writing-tests` | Choose the right test layer; 12 regression archetypes; deterministic coroutine tests |
-| `local-review` | Review staged, unstaged and untracked changes for demonstrated defects |
+| `local-review` | Pre-MR review loop with the reviewer agent, a per-branch decision ledger and ticket test-case coverage |
 | `root-cause-analysis` | Diagnose a defect from evidence before fixing it |
 | `maestro-e2e` | Write and run Maestro flows; screenshots against the design |
 | `implementation-plan` | Ticket + PRD + discussions + repos → scoped, estimated plan with Gantt |
 | `jira-ticket` | Read a Jira ticket, extract acceptance criteria, prepare the branch |
 | `create-mr` | Commit, push and open a GitLab MR (or GitHub PR) with review/CI gates |
+| `mr-review` | Resolve MR review threads in a loop: triage, fix, test, reply, resolve, push |
 | `project-integrations` | Jira, Confluence, GitLab and Figma access and the REST fallback |
 
 Shared references: [MVI contract](plugins/android-skills/references/mvi.md),
@@ -75,6 +76,19 @@ curl -fsSL https://raw.githubusercontent.com/hdtrieu/android-agent-skills/main/p
 chmod 600 ~/.config/android-agent-skills/.env
 # edit the file, then ask Claude to run the project-integrations doctor
 ```
+
+The CLI has high-level commands so skills do not hand-craft REST calls:
+
+```sh
+python3 scripts/integrations.py jira issue ABC-123 --comments 50
+python3 scripts/integrations.py confluence page <id-or-url>
+python3 scripts/integrations.py gitlab mr discussions <mr-url> --unresolved
+python3 scripts/integrations.py gitlab mr create --source <branch> --title "..." --description-file mr.md --write
+python3 scripts/integrations.py figma nodes --file '<figma-url-with-node-id>'
+```
+
+See the [integrations reference](plugins/android-skills/references/integrations.md) for every
+command.
 
 The env file is parsed as plain `NAME=value` lines without shell execution; exported
 variables win. `doctor` checks configuration offline and never prints secrets. Write

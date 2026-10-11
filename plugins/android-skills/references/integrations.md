@@ -42,14 +42,44 @@ Atlassian scoped tokens/OAuth may need `api.atlassian.com` gateway URLs with a c
 ID; set the matching base URL. Data Center instances are not assumed compatible
 with the Cloud examples.
 
-## Check and request
+## Commands
+
+Run from the plugin root, or call the script by absolute path. Output is JSON.
+
+| Command | What it returns |
+| --- | --- |
+| `doctor` | Per-service state and context values; offline |
+| `jira issue KEY [--comments N] [--fields a,b] [--raw]` | Summary, type, status, people, parent, labels, components, versions, description as text, subtasks, links, attachments, comments oldest-first |
+| `jira search --jql Q [--limit N] [--fields a,b]` | Trimmed issues, token pagination, `truncated` flag |
+| `jira fields [--name text]` | Field ids by name (story points, custom fields) |
+| `jira myself` | The authenticated account |
+| `jira comment KEY --body-file F --write` | Posts plain text (converted to Atlassian document format) |
+| `confluence page ID-or-URL [--format storage\|atlas_doc_format\|view]` | Title, version, URL, body |
+| `confluence children ID` / `confluence search --title T [--space-id S]` | Page lists |
+| `gitlab project [PROJECT]` | id, path, default branch |
+| `gitlab mr get MR` | State, branches, sha, draft, conflicts, merge status, reviewers, labels, head pipeline |
+| `gitlab mr list [--source B] [--target B] [--state S]` | MRs for a branch |
+| `gitlab mr create --source B --title T --description-file F [--target B] [--draft] [--label L] [--[no-]squash] [--[no-]remove-source-branch] --write` | The created MR |
+| `gitlab mr discussions MR [--unresolved]` | Threads with id, resolved state and notes with `file:line` |
+| `gitlab mr note MR --body-file F [--discussion ID] --write` | General note, or a reply in a thread |
+| `gitlab mr resolve MR --discussion ID [--unresolve] --write` | Thread state |
+| `gitlab mr label MR --add L --remove L --write` | Labels |
+| `gitlab mr pipelines MR` / `gitlab mr changes MR [--names-only]` | Pipelines; changed files and diffs |
+| `gitlab file get PATH --ref R [--project P]` | Text content of a repository file |
+| `figma nodes --file KEY-or-URL [--ids 1:2] [--depth N]` | Node tree summary (names, types, sizes, text) |
+| `figma images --file KEY-or-URL [--ids 1:2] [--format svg\|png\|jpg\|pdf]` | Rendered image URLs |
+| `request SERVICE METHOD PATH [--query k=v] [--body-file F] [--write]` | Any other endpoint, one call |
+
+`MR` is an MR URL, `<project> <iid>`, or an iid with `GITLAB_PROJECT` set. Figma URLs supply
+the file key, branch key and `node-id`. `--project` defaults to `GITLAB_PROJECT`; `--target`
+defaults to `GIT_TARGET_BRANCH`.
 
 ```sh
 python3 scripts/integrations.py doctor
-python3 scripts/integrations.py request jira GET issue/ABC-123
-python3 scripts/integrations.py request confluence GET pages/PAGE_ID
+python3 scripts/integrations.py jira issue ABC-123 --comments 50
+python3 scripts/integrations.py gitlab mr discussions https://gitlab.example/group/app/-/merge_requests/42 --unresolved
+python3 scripts/integrations.py request jira GET issue/ABC-123/transitions
 python3 scripts/integrations.py request gitlab GET projects/group%2Fproject/merge_requests --query state=opened
-python3 scripts/integrations.py request figma GET files/FILE_KEY/nodes --query ids=1:2
 ```
 
 `doctor` makes no network request. `configured-unverified` does not prove token

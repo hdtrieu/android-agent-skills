@@ -13,6 +13,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+import integration_commands
+
 DEFAULT_ENV_FILE = Path.home() / ".config" / "android-agent-skills" / ".env"
 
 # Each service is enabled when its token variable is set. Basic auth is used when
@@ -220,11 +222,16 @@ def main(argv=None):
     api.add_argument("--body-file", type=Path)
     api.add_argument("--write", action="store_true")
     api.add_argument("--timeout", type=int, default=30)
+    integration_commands.register(commands)
     args = parser.parse_args(argv)
     try:
         load_env_file(args.env_file)
         if args.command == "doctor":
             result = doctor()
+        elif args.command != "request":
+            context = {key: os.environ[key] for key in CONTEXT if os.environ.get(key)}
+            result = integration_commands.run(
+                args, lambda *call: request(*call), lambda name: service_config(name)["base_url"], context)
         else:
             body = json.loads(args.body_file.read_text(encoding="utf-8")) if args.body_file else None
             result = request(args.service, args.method, args.path, args.query,
@@ -233,7 +240,7 @@ def main(argv=None):
         if args.command == "doctor":
             return int(any(s["state"] == "incomplete" for s in result["services"].values()))
         return 0
-    except CommandError as exc:
+    except (CommandError, integration_commands.UsageError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
     except (ValueError, OSError, TypeError):

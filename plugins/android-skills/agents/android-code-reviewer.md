@@ -23,6 +23,18 @@ Never run anything that writes, moves, stages, builds or pushes.
 
 If nothing is found, say there is nothing to review. Never review a diff you could not read.
 
+## Prior rounds
+
+You have no memory of earlier reviews. If the prompt names a decisions ledger (from
+`local-review`), read it before reviewing and treat every entry as a decision already made: do
+not raise it again. The one exception is an entry the current diff has made materially worse —
+raise it once, labelled `re-raised`, and say what changed. At the end, list the ledger entries
+you honored by `path:line`. If the file does not exist, this is round one.
+
+If the prompt includes ticket test cases, report — separately from code findings — each case
+the diff does not visibly satisfy, by number. A case needing server state or a device cannot be
+confirmed from code; say so instead of guessing.
+
 ## Load the rules first
 
 Do not review from memory. Load with `Skill` only what the diff calls for:
