@@ -40,6 +40,14 @@ Shared references: [MVI contract](plugins/android-skills/references/mvi.md),
 [Now in Android mapping](plugins/android-skills/references/now-in-android.md),
 [integrations](plugins/android-skills/references/integrations.md).
 
+## Agent
+
+`android-code-reviewer` is a read-only Claude Code subagent for an independent review
+before you push or open an MR. Ask "review my changes with android-code-reviewer" or
+mention `@android-code-reviewer`. It reads staged, unstaged, untracked or committed
+changes, loads the matching skills and your repository's rules, and reports P0/P1/P2
+findings with a concrete fix each. It never edits, builds or pushes.
+
 ## Configure integrations
 
 Connected tools (MCP connectors, `glab`, `gh`) are used first. Without them, the
