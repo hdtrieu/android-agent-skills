@@ -1,0 +1,19 @@
+{
+  "name": "android-agent-skills",
+  "owner": {
+    "name": "hdtrieu"
+  },
+  "metadata": {
+    "description": "Android engineering skills for Claude Code: conventions, MVI, testing, review, Jira tickets and GitLab MRs."
+  },
+  "plugins": [
+    {
+      "name": "android-skills",
+      "source": "./plugins/android-skills",
+      "description": "Android Kotlin/Compose conventions, Clean Architecture + MVI, tests, local review, root-cause analysis, Maestro E2E, implementation plans, Jira ticket branches and GitLab MRs configured through your own environment.",
+      "version": "1.0.0",
+      "category": "development",
+      "keywords": ["android", "kotlin", "jetpack-compose", "mvi", "testing", "jira", "gitlab", "figma"]
+    }
+  ]
+}

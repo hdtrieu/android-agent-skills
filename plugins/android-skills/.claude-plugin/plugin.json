@@ -1,0 +1,12 @@
+{
+  "name": "android-skills",
+  "description": "Android Kotlin/Compose conventions, Clean Architecture + MVI, tests, local review, root-cause analysis, Maestro E2E, implementation plans, Jira ticket branches and GitLab MRs configured through your own environment.",
+  "version": "1.0.0",
+  "author": {
+    "name": "hdtrieu"
+  },
+  "homepage": "https://github.com/hdtrieu/android-agent-skills",
+  "repository": "https://github.com/hdtrieu/android-agent-skills",
+  "license": "MIT",
+  "keywords": ["android", "kotlin", "jetpack-compose", "mvi", "testing", "jira", "gitlab", "figma"]
+}
